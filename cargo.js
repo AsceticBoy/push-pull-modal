@@ -1,5 +1,5 @@
 // 抛个interesting的问题
-function * takeEvent (node) {
+function * oldTakeEvent (node) {
   node.addEventListener('click', function (e) {
     // 我想把e给yield出去，但是我不知道e什么时候会出现，即：回调什么时候会执行呢
   }, false)
@@ -11,6 +11,7 @@ function * takeEvent (node) {
 // 好的，那来修改下这个interesting的模型吧！
 
 // 先看看最后的Genertor函数形态
+// Usage:
 function * takeEvent () {
   // 先引入监控者Monitor
   var monitor = getMonitor()
@@ -25,14 +26,14 @@ function * takeEvent () {
 // 首先，我们需要把拉取的权限把露出来
 // 原因：1.在Generator中我也没法知道啥时候‘e’会有值
 //      2.拉取的过程应该保证用户的不可知，保持Generator尽量的纯净
-function disdatch () {
+export function disdatch (generator) {
   // takeEvent()返回实现[Symbol.iterator]接口的对象，所以Generator只是个不错的语法糖
-  var generator = takeEvent()
+  var iterator = generator()
   // 写的步调函数
   function step (e) {
     // 拉取数据
     // 注意：这里有个重点，一切之所以能实现，得益于next(args)能将args注入到函数体内
-    var it = generator.next(e)
+    var it = iterator.next(e)
     // 调用结束(return 或 Generator执行结束了)，这个Demo不存在这情况
     if (it.done) {
       return 
@@ -45,12 +46,12 @@ function disdatch () {
       step(e)
     })
   }
-  // 开始拉取了
-  step()
+
+  return step
 }
 
 // 再来看看Monitor
-function getMonitor () {
+export function getMonitor (node, event) {
   var taker = null
 
   function put (e) {
@@ -58,14 +59,14 @@ function getMonitor () {
     if (!taker) {
       return 
     }
-    var _taker = null
+    var _taker = taker
     // 防止每次的拉取者不是同一个
     taker = null
     // 赶紧把数据源发送给调用者
     _taker(e)
   }
 
-  node.addEventListener('click', function (e) {
+  node.addEventListener([event], function (e) {
     // 监控到e了，赶紧抛出去
     put(e)
   }, false)

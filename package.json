@@ -1,0 +1,24 @@
+{
+  "name": "push-pull-modal",
+  "version": "1.0.0",
+  "description": "Mini push-pull-modal by study Generator reference from Co",
+  "main": "index.js",
+  "repository": "https://github.com/AsceticBoy/push-pull-modal.git",
+  "author": "Ascetic <398121373@qq.com>",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "less": "^2.7.3",
+    "parcel-bundler": "^1.4.1"
+  },
+  "scripts": {
+    "start": "parcel index.html"
+  }
+}
